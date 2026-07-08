@@ -594,18 +594,20 @@ header {visibility: hidden;}
 }
 
 /* Video Styling */
-.stVideo > div {
+[data-testid="stVideo"] {
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow);
     border: 2px solid var(--light-green);
     width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-.stVideo video {
+[data-testid="stVideo"] video {
     width: 100% !important;
     height: auto !important;
-    max-height: 70vh !important;
+    max-height: 250px !important;
     object-fit: contain !important;
 }
 
