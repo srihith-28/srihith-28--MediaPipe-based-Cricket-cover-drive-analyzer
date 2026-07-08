@@ -59,7 +59,12 @@ class AnalysisResult:
 # ===============================
 class EnhancedCoverDriveAnalyzer:
     def __init__(self):
-        self.mp_pose = mp.solutions.pose
+        # Fix for 'module mediapipe has no attribute solutions' error
+        try:
+            self.mp_pose = mp.solutions.pose
+        except AttributeError:
+            import mediapipe.python.solutions.pose as mp_pose_module
+            self.mp_pose = mp_pose_module
         self.pose = self.mp_pose.Pose(
             static_image_mode=False,
             model_complexity=0,  # Lightweight model for speed
@@ -953,13 +958,19 @@ def analyze_video(video_path: str, output_dir: str = "output") -> Dict:
 
 def annotate_frame_enhanced(frame, results, metrics, bat_info, frame_number):
     """Enhanced frame annotation with cricket metrics, bat detection, and performance info."""
-    mp_drawing = mp.solutions.drawing_utils
+    try:
+        mp_drawing = mp.solutions.drawing_utils
+        pose_connections = mp.solutions.pose.POSE_CONNECTIONS
+    except AttributeError:
+        import mediapipe.python.solutions.drawing_utils as mp_drawing
+        import mediapipe.python.solutions.pose as mp_pose_module
+        pose_connections = mp_pose_module.POSE_CONNECTIONS
     
     # Draw pose landmarks
     if results and results.pose_landmarks:
         mp_drawing.draw_landmarks(
             frame, results.pose_landmarks, 
-            mp.solutions.pose.POSE_CONNECTIONS,
+            pose_connections,
             landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2),
             connection_drawing_spec=mp_drawing.DrawingSpec(color=(255, 255, 255), thickness=2)
         )

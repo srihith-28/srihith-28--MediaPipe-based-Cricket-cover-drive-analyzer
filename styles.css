@@ -599,6 +599,14 @@ header {visibility: hidden;}
     overflow: hidden;
     box-shadow: var(--shadow);
     border: 2px solid var(--light-green);
+    width: 100%;
+}
+
+.stVideo video {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 70vh !important;
+    object-fit: contain !important;
 }
 
 /* Streamlit Component Overrides */
